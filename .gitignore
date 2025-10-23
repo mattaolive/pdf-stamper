@@ -1,0 +1,10 @@
+# PDF files (test files, not needed in deployment)
+*.pdf
+
+# Windows batch files (only for local development)
+*.bat
+
+# System files
+.DS_Store
+Thumbs.db
+

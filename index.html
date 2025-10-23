@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Stamper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #8e8e93;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 10px;
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #0a84ff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-area {
+            width: 100%;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #0a84ff;
+            background: rgba(10, 132, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: #8e8e93;
+            font-size: 15px;
+        }
+
+        #pdfInput {
+            display: none;
+        }
+
+        .pdf-list {
+            margin-top: 20px;
+        }
+
+        .pdf-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+        }
+
+        .pdf-icon {
+            font-size: 24px;
+        }
+
+        .pdf-name {
+            flex: 1;
+            font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .code-input {
+            width: 200px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #0a84ff;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #0a84ff 0%, #0066cc 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            background: linear-gradient(135deg, #0070e0 0%, #0055aa 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-generate:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #8e8e93;
+            cursor: not-allowed;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .status.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .pdf-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .code-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PDF Stamper</h1>
+            <p class="subtitle">Upload PDFs, add codes, generate stamped document</p>
+        </header>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="dateInput">Date</label>
+                <input type="date" id="dateInput" class="date-input">
+            </div>
+
+            <div class="input-group">
+                <label>Upload PDF Files</label>
+                <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Click to select PDF files</div>
+                </div>
+                <input type="file" id="pdfInput" accept=".pdf" multiple>
+            </div>
+
+            <div id="pdfList" class="pdf-list"></div>
+        </div>
+
+        <button id="generateBtn" class="btn-generate" disabled>Generate Combined PDF</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script>
+        // Set today's date
+        document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+
+        // State
+        let stampImage = null;
+        let pdfFiles = [];
+
+        // Load stamp image automatically on startup
+        async function loadStampImage() {
+            try {
+                showStatus('Loading stamp image...');
+                const response = await fetch('stamp pci.jpg');
+                if (!response.ok) throw new Error('Could not load stamp pci.jpg');
+                
+                const blob = await response.blob();
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        stampImage = img;
+                        showStatus('✓ Ready! Stamp image loaded.');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(blob);
+                
+            } catch (error) {
+                showStatus('ERROR: Could not load stamp pci.jpg - Make sure you are running a local web server!');
+                console.error(error);
+            }
+        }
+
+        // Load stamp on page load
+        loadStampImage();
+
+        // Handle PDF file upload
+        document.getElementById('pdfInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            pdfFiles = files.map(file => ({ file: file, code: '' }));
+            renderPdfList();
+            showStatus(`${files.length} PDF file(s) loaded`);
+        });
+
+        // Render PDF list
+        function renderPdfList() {
+            const listEl = document.getElementById('pdfList');
+            listEl.innerHTML = '';
+
+            if (pdfFiles.length === 0) return;
+
+            pdfFiles.forEach((pdfData) => {
+                const item = document.createElement('div');
+                item.className = 'pdf-item';
+                
+                const icon = document.createElement('span');
+                icon.className = 'pdf-icon';
+                icon.textContent = '📄';
+                
+                const name = document.createElement('span');
+                name.className = 'pdf-name';
+                name.textContent = pdfData.file.name;
+                name.title = pdfData.file.name;
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'code-input';
+                input.placeholder = 'Enter code';
+                input.value = pdfData.code;
+                input.addEventListener('input', function(e) {
+                    pdfData.code = e.target.value;
+                    updateGenerateButton();
+                });
+                
+                item.appendChild(icon);
+                item.appendChild(name);
+                item.appendChild(input);
+                listEl.appendChild(item);
+            });
+
+            updateGenerateButton();
+        }
+
+        // Update generate button state
+        function updateGenerateButton() {
+            const hasStamp = stampImage !== null;
+            const hasPdfs = pdfFiles.length > 0;
+            const allHaveCodes = pdfFiles.every(pdf => pdf.code.trim() !== '');
+            document.getElementById('generateBtn').disabled = !(hasStamp && hasPdfs && allHaveCodes);
+        }
+
+        // Create stamped image with text using canvas
+        async function createStampedImage(dateText, codeText) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size to stamp image size
+            canvas.width = stampImage.width;
+            canvas.height = stampImage.height;
+            
+            // Draw the stamp image
+            ctx.drawImage(stampImage, 0, 0);
+            
+            // Setup text styling - BOLD and VISIBLE
+            ctx.fillStyle = '#000000'; // Black color for maximum visibility
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            
+            // Calculate font size based on image size
+            const fontSize = Math.floor(canvas.width / 12);
+            ctx.font = `900 ${fontSize}px Arial Black, Arial`;
+            
+            // Position date and code to align with stamp fields
+            // Adjust these values based on your stamp layout
+            const leftMargin = canvas.width * 0.30; // Start position from left
+            const dateY = canvas.height * 0.62; // Date vertical position (LOWER)
+            const codeY = canvas.height * 0.83; // Code vertical position (EVEN LOWER)
+            
+            // Draw date text with stroke for extra boldness
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.strokeText(dateText, leftMargin, dateY);
+            ctx.fillText(dateText, leftMargin, dateY);
+            
+            // Draw code text with stroke for extra boldness
+            ctx.strokeText(codeText, leftMargin, codeY);
+            ctx.fillText(codeText, leftMargin, codeY);
+            
+            // Convert canvas to bytes
+            return new Promise((resolve) => {
+                canvas.toBlob(async (blob) => {
+                    const arrayBuffer = await blob.arrayBuffer();
+                    resolve(new Uint8Array(arrayBuffer));
+                }, 'image/jpeg', 0.95);
+            });
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${month}/${day}/${year}`;
+        }
+
+        // Generate combined PDF
+        document.getElementById('generateBtn').addEventListener('click', async function() {
+            if (!stampImage) {
+                showStatus('Error: Stamp image not loaded');
+                return;
+            }
+
+            showStatus('Generating PDF...');
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+                const dateStr = formatDate(document.getElementById('dateInput').value);
+
+                // Process each PDF
+                for (let i = 0; i < pdfFiles.length; i++) {
+                    const pdfData = pdfFiles[i];
+                    
+                    // Create stamped image with date and code
+                    const stampedImageBytes = await createStampedImage(dateStr, pdfData.code);
+                    
+                    // Load source PDF
+                    const arrayBuffer = await pdfData.file.arrayBuffer();
+                    const sourcePdf = await PDFDocument.load(arrayBuffer);
+                    
+                    // Copy all pages
+                    const pageIndices = sourcePdf.getPageIndices();
+                    const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
+                    
+                    // Add pages and stamp first page only
+                    for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
+                        const page = copiedPages[pageIndex];
+                        mergedPdf.addPage(page);
+                        
+                        // Stamp only the first page
+                        if (pageIndex === 0) {
+                            // Embed the stamped image for this PDF
+                            const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
+                            
+                            const { width, height } = page.getSize();
+                            
+                            // Position: top right corner
+                            const stampWidth = 150;
+                            const stampHeight = 90;
+                            const margin = 30;
+                            const x = width - stampWidth - margin;
+                            const y = height - stampHeight - margin;
+                            
+                            // Draw stamp on page with more saturation
+                            page.drawImage(stampImg, {
+                                x: x,
+                                y: y,
+                                width: stampWidth,
+                                height: stampHeight,
+                                opacity: 0.5
+                            });
+                        }
+                    }
+                }
+
+                // Save and download
+                const pdfBytes = await mergedPdf.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `stamped_${Date.now()}.pdf`;
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                showStatus('✓ PDF generated successfully!');
+
+            } catch (error) {
+                showStatus('Error: ' + error.message);
+                console.error(error);
+            }
+        });
+
+        // Show status message
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.classList.add('show');
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
