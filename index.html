@@ -37,81 +37,45 @@
             background: var(--bg-black);
             border-bottom: 1px solid var(--border-gray);
             z-index: 100;
-            backdrop-filter: blur(10px);
         }
 
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 30px 40px;
+            padding: 20px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            position: relative;
         }
 
-        .logo-image, .stamp-image {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: absolute;
-            animation: float 4s ease-in-out infinite;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
         }
 
         .logo-image {
-            left: 80px;
-            animation-delay: 0s;
-        }
-
-        .stamp-image {
-            right: 80px;
-            animation-delay: 2s;
-        }
-
-        .logo-image:hover, .stamp-image:hover {
-            transform: scale(1.15) rotate(5deg);
-            filter: brightness(1.2);
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
         }
 
         .logo-text {
-            font-size: 64px;
-            font-weight: 900;
-            letter-spacing: 4px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
             color: var(--text-white);
-            text-align: center;
-            position: relative;
-            animation: glow 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                text-shadow: 
-                    0 0 10px rgba(255, 255, 255, 0.3),
-                    0 0 20px rgba(255, 255, 255, 0.2),
-                    0 0 30px rgba(255, 255, 255, 0.1);
-            }
-            50% {
-                text-shadow: 
-                    0 0 20px rgba(255, 255, 255, 0.5),
-                    0 0 40px rgba(255, 255, 255, 0.3),
-                    0 0 60px rgba(255, 255, 255, 0.2);
-            }
         }
 
         /* Hero */
         .hero {
-            margin-top: 140px;
+            margin-top: 100px;
             padding: 80px 40px 60px;
             text-align: center;
             border-bottom: 1px solid var(--border-gray);
@@ -448,17 +412,23 @@
             position: absolute;
             top: 24px;
             right: 24px;
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            font-size: 32px;
+            background: var(--bg-black);
+            border: 2px solid var(--text-white);
+            color: var(--text-white);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 4px;
             cursor: pointer;
             line-height: 1;
-            transition: color 0.2s;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .modal-close:hover {
-            color: var(--text-white);
+            background: var(--text-white);
+            color: var(--bg-black);
         }
 
         .modal-logo {
@@ -467,7 +437,7 @@
         }
 
         .modal-logo img {
-            width: 100px;
+            width: 200px;
             height: auto;
         }
 
@@ -584,27 +554,21 @@
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
-                padding: 20px;
-                flex-direction: column;
-                gap: 20px;
+                padding: 16px 20px;
             }
 
-            .logo-image, .stamp-image {
-                width: 50px;
-                height: 50px;
-                position: relative;
-                left: auto;
-                right: auto;
+            .logo-image {
+                width: 40px;
+                height: 40px;
             }
 
             .logo-text {
-                font-size: 36px;
-                letter-spacing: 2px;
+                font-size: 20px;
             }
 
             .hero {
                 padding: 60px 20px 40px;
-                margin-top: 200px;
+                margin-top: 80px;
             }
 
             .hero-title {
@@ -651,9 +615,10 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <img src="logo.png" alt="Logo" class="logo-image" id="logoImage">
-            <div class="logo-text">PDFSTAMP</div>
-            <img src="stamp pci.jpg" alt="Stamp" class="stamp-image" id="stampImage">
+            <div class="logo-container" id="logoContainer">
+                <img src="logo.png" alt="PDFSTAMP Logo" class="logo-image">
+                <div class="logo-text">PDFSTAMP</div>
+            </div>
         </div>
     </div>
 
@@ -716,7 +681,7 @@
     <!-- About Modal -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeAboutModal()">&times;</button>
+            <button class="modal-close" onclick="closeAboutModal()">Close</button>
             
             <div class="modal-logo">
                 <img src="logo.png" alt="PDFSTAMP Logo">
@@ -789,12 +754,8 @@
         let dragOffset = { x: 0, y: 0 };
         let canvasScale = 1;
 
-        // About modal - open from both images
-        document.getElementById('logoImage').addEventListener('click', function() {
-            document.getElementById('aboutModal').classList.add('show');
-        });
-
-        document.getElementById('stampImage').addEventListener('click', function() {
+        // About modal - open from logo click
+        document.getElementById('logoContainer').addEventListener('click', function() {
             document.getElementById('aboutModal').classList.add('show');
         });
 
