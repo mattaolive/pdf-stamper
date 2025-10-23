@@ -147,7 +147,7 @@
             border-color: #0a84ff;
         }
 
-        .btn-generate {
+        .btn-preview, .btn-generate {
             width: 100%;
             padding: 18px;
             font-size: 16px;
@@ -157,17 +157,202 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            margin-bottom: 12px;
         }
 
+        .btn-preview:hover:not(:disabled),
         .btn-generate:hover:not(:disabled) {
             background: linear-gradient(135deg, #0070e0 0%, #0055aa 100%);
             transform: translateY(-2px);
         }
 
+        .btn-preview:disabled,
         .btn-generate:disabled {
             background: rgba(255, 255, 255, 0.1);
             color: #8e8e93;
             cursor: not-allowed;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #34c759 0%, #248a3d 100%);
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            background: linear-gradient(135deg, #30b350 0%, #1e7a35 100%);
+        }
+
+        /* Preview Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        .btn-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .preview-area {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .preview-canvas-container {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #previewCanvas {
+            width: 100%;
+            display: block;
+            cursor: move;
+        }
+
+        .controls {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .control-group {
+            margin-bottom: 24px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 12px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #0a84ff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #0a84ff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            display: block;
+            text-align: center;
+            margin-top: 8px;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .position-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .position-input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .position-input:focus {
+            outline: none;
+            border-color: #0a84ff;
+        }
+
+        .btn-lock {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #34c759 0%, #248a3d 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-lock:hover {
+            background: linear-gradient(135deg, #30b350 0%, #1e7a35 100%);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #8e8e93;
+            margin-top: 12px;
+            text-align: center;
         }
 
         .status {
@@ -182,7 +367,7 @@
             font-size: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
-            z-index: 1000;
+            z-index: 1001;
         }
 
         .status.show {
@@ -193,6 +378,15 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        @media (max-width: 1024px) {
+            .preview-area {
+                flex-direction: column;
+            }
+            .controls {
+                width: 100%;
+            }
         }
 
         @media (max-width: 600px) {
@@ -210,7 +404,7 @@
     <div class="container">
         <header>
             <h1>PDF Stamper</h1>
-            <p class="subtitle">Upload PDFs, add codes, generate stamped document</p>
+            <p class="subtitle">Upload PDFs, add codes, preview & adjust, generate</p>
         </header>
 
         <div class="card">
@@ -231,7 +425,56 @@
             <div id="pdfList" class="pdf-list"></div>
         </div>
 
-        <button id="generateBtn" class="btn-generate" disabled>Generate Combined PDF</button>
+        <button id="previewBtn" class="btn-preview" disabled>Preview & Adjust Stamp</button>
+        <button id="generateBtn" class="btn-generate" disabled style="display: none;">Generate Combined PDF</button>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Preview & Adjust Stamp Position</h2>
+                <button class="btn-close" onclick="closePreview()">×</button>
+            </div>
+            
+            <div class="preview-area">
+                <div class="preview-canvas-container">
+                    <canvas id="previewCanvas"></canvas>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label class="control-label">Stamp Opacity</label>
+                        <input type="range" id="opacitySlider" class="slider" min="10" max="100" value="50">
+                        <span class="slider-value" id="opacityValue">50%</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Stamp Position (X, Y)</label>
+                        <div class="position-inputs">
+                            <input type="number" id="stampX" class="position-input" placeholder="X">
+                            <input type="number" id="stampY" class="position-input" placeholder="Y">
+                        </div>
+                        <p class="help-text">Or drag the stamp on the preview</p>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Date Position (Y)</label>
+                        <input type="range" id="dateYSlider" class="slider" min="0" max="100" value="62">
+                        <span class="slider-value" id="dateYValue">62%</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Code Position (Y)</label>
+                        <input type="range" id="codeYSlider" class="slider" min="0" max="100" value="83">
+                        <span class="slider-value" id="codeYValue">83%</span>
+                    </div>
+
+                    <button class="btn-lock" onclick="lockSettings()">Lock & Continue</button>
+                    <p class="help-text">These settings will apply to all PDFs</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="status" class="status"></div>
@@ -244,6 +487,16 @@
         // State
         let stampImage = null;
         let pdfFiles = [];
+        let previewPdfDoc = null;
+        let stampSettings = {
+            opacity: 0.5,
+            x: null,
+            y: null,
+            dateY: 0.62,
+            codeY: 0.83
+        };
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
 
         // Load stamp image automatically on startup
         async function loadStampImage() {
@@ -271,7 +524,6 @@
             }
         }
 
-        // Load stamp on page load
         loadStampImage();
 
         // Handle PDF file upload
@@ -311,7 +563,7 @@
                 input.value = pdfData.code;
                 input.addEventListener('input', function(e) {
                     pdfData.code = e.target.value;
-                    updateGenerateButton();
+                    updateButtons();
                 });
                 
                 item.appendChild(icon);
@@ -320,15 +572,218 @@
                 listEl.appendChild(item);
             });
 
-            updateGenerateButton();
+            updateButtons();
         }
 
-        // Update generate button state
-        function updateGenerateButton() {
+        // Update button states
+        function updateButtons() {
             const hasStamp = stampImage !== null;
             const hasPdfs = pdfFiles.length > 0;
             const allHaveCodes = pdfFiles.every(pdf => pdf.code.trim() !== '');
-            document.getElementById('generateBtn').disabled = !(hasStamp && hasPdfs && allHaveCodes);
+            document.getElementById('previewBtn').disabled = !(hasStamp && hasPdfs && allHaveCodes);
+        }
+
+        // Preview button
+        document.getElementById('previewBtn').addEventListener('click', async function() {
+            if (!stampImage || pdfFiles.length === 0) return;
+
+            showStatus('Loading preview...');
+            
+            try {
+                // Load first PDF for preview
+                const firstPdf = pdfFiles[0];
+                const arrayBuffer = await firstPdf.file.arrayBuffer();
+                const { PDFDocument } = PDFLib;
+                previewPdfDoc = await PDFDocument.load(arrayBuffer);
+                
+                await renderPreview();
+                document.getElementById('previewModal').classList.add('show');
+                showStatus('Drag the stamp to adjust position');
+            } catch (error) {
+                showStatus('Error loading preview: ' + error.message);
+                console.error(error);
+            }
+        });
+
+        // Render preview
+        async function renderPreview() {
+            const canvas = document.getElementById('previewCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Get first page
+            const page = previewPdfDoc.getPage(0);
+            const { width, height } = page.getSize();
+            
+            // Set canvas size
+            const scale = 1.5;
+            canvas.width = width * scale;
+            canvas.height = height * scale;
+            
+            // Render PDF page to canvas using pdf-lib
+            const pdfBytes = await previewPdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            // Use PDF.js to render (we need to load it)
+            const pdf = await pdfjsLib.getDocument(url).promise;
+            const pdfPage = await pdf.getPage(1);
+            const viewport = pdfPage.getViewport({ scale: scale });
+            
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            await pdfPage.render({
+                canvasContext: ctx,
+                viewport: viewport
+            }).promise;
+            
+            URL.revokeObjectURL(url);
+            
+            // Set default stamp position if not set
+            if (stampSettings.x === null) {
+                stampSettings.x = viewport.width - 150 - 30;
+                stampSettings.y = 30;
+                document.getElementById('stampX').value = Math.round(stampSettings.x);
+                document.getElementById('stampY').value = Math.round(stampSettings.y);
+            }
+            
+            // Draw stamp
+            drawStampOnCanvas(ctx, viewport.width, viewport.height);
+        }
+
+        // Draw stamp on canvas
+        function drawStampOnCanvas(ctx, canvasWidth, canvasHeight) {
+            // Create stamped image
+            const stampCanvas = document.createElement('canvas');
+            const stampCtx = stampCanvas.getContext('2d');
+            
+            stampCanvas.width = stampImage.width;
+            stampCanvas.height = stampImage.height;
+            
+            // Draw stamp
+            stampCtx.drawImage(stampImage, 0, 0);
+            
+            // Draw date and code
+            const dateText = formatDate(document.getElementById('dateInput').value);
+            const codeText = pdfFiles[0].code;
+            
+            stampCtx.fillStyle = '#000000';
+            stampCtx.textAlign = 'left';
+            stampCtx.textBaseline = 'middle';
+            
+            const fontSize = Math.floor(stampCanvas.width / 12);
+            stampCtx.font = `900 ${fontSize}px Arial Black, Arial`;
+            
+            const leftMargin = stampCanvas.width * 0.30;
+            const dateY = stampCanvas.height * stampSettings.dateY;
+            const codeY = stampCanvas.height * stampSettings.codeY;
+            
+            stampCtx.strokeStyle = '#000000';
+            stampCtx.lineWidth = 2;
+            
+            stampCtx.strokeText(dateText, leftMargin, dateY);
+            stampCtx.fillText(dateText, leftMargin, dateY);
+            
+            stampCtx.strokeText(codeText, leftMargin, codeY);
+            stampCtx.fillText(codeText, leftMargin, codeY);
+            
+            // Draw on main canvas with opacity
+            ctx.globalAlpha = stampSettings.opacity;
+            
+            const stampWidth = 150;
+            const stampHeight = 90;
+            
+            ctx.drawImage(stampCanvas, stampSettings.x, stampSettings.y, stampWidth, stampHeight);
+            ctx.globalAlpha = 1.0;
+        }
+
+        // Opacity slider
+        document.getElementById('opacitySlider').addEventListener('input', async function(e) {
+            stampSettings.opacity = e.target.value / 100;
+            document.getElementById('opacityValue').textContent = e.target.value + '%';
+            await renderPreview();
+        });
+
+        // Date Y slider
+        document.getElementById('dateYSlider').addEventListener('input', async function(e) {
+            stampSettings.dateY = e.target.value / 100;
+            document.getElementById('dateYValue').textContent = e.target.value + '%';
+            await renderPreview();
+        });
+
+        // Code Y slider
+        document.getElementById('codeYSlider').addEventListener('input', async function(e) {
+            stampSettings.codeY = e.target.value / 100;
+            document.getElementById('codeYValue').textContent = e.target.value + '%';
+            await renderPreview();
+        });
+
+        // Position inputs
+        document.getElementById('stampX').addEventListener('input', async function(e) {
+            stampSettings.x = parseFloat(e.target.value) || 0;
+            await renderPreview();
+        });
+
+        document.getElementById('stampY').addEventListener('input', async function(e) {
+            stampSettings.y = parseFloat(e.target.value) || 0;
+            await renderPreview();
+        });
+
+        // Canvas dragging
+        const canvas = document.getElementById('previewCanvas');
+        
+        canvas.addEventListener('mousedown', function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Check if click is on stamp
+            const stampWidth = 150;
+            const stampHeight = 90;
+            
+            if (x >= stampSettings.x && x <= stampSettings.x + stampWidth &&
+                y >= stampSettings.y && y <= stampSettings.y + stampHeight) {
+                isDragging = true;
+                dragOffset.x = x - stampSettings.x;
+                dragOffset.y = y - stampSettings.y;
+            }
+        });
+
+        canvas.addEventListener('mousemove', async function(e) {
+            if (!isDragging) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            stampSettings.x = x - dragOffset.x;
+            stampSettings.y = y - dragOffset.y;
+            
+            document.getElementById('stampX').value = Math.round(stampSettings.x);
+            document.getElementById('stampY').value = Math.round(stampSettings.y);
+            
+            await renderPreview();
+        });
+
+        canvas.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('mouseleave', function() {
+            isDragging = false;
+        });
+
+        // Close preview
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('show');
+        }
+
+        // Lock settings
+        function lockSettings() {
+            document.getElementById('previewModal').classList.remove('show');
+            document.getElementById('generateBtn').style.display = 'block';
+            document.getElementById('generateBtn').disabled = false;
+            showStatus('✓ Settings locked! Ready to generate.');
         }
 
         // Create stamped image with text using canvas
@@ -336,39 +791,30 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            // Set canvas size to stamp image size
             canvas.width = stampImage.width;
             canvas.height = stampImage.height;
             
-            // Draw the stamp image
             ctx.drawImage(stampImage, 0, 0);
             
-            // Setup text styling - BOLD and VISIBLE
-            ctx.fillStyle = '#000000'; // Black color for maximum visibility
+            ctx.fillStyle = '#000000';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
             
-            // Calculate font size based on image size
             const fontSize = Math.floor(canvas.width / 12);
             ctx.font = `900 ${fontSize}px Arial Black, Arial`;
             
-            // Position date and code to align with stamp fields
-            // Adjust these values based on your stamp layout
-            const leftMargin = canvas.width * 0.30; // Start position from left
-            const dateY = canvas.height * 0.62; // Date vertical position (LOWER)
-            const codeY = canvas.height * 0.83; // Code vertical position (EVEN LOWER)
+            const leftMargin = canvas.width * 0.30;
+            const dateY = canvas.height * stampSettings.dateY;
+            const codeY = canvas.height * stampSettings.codeY;
             
-            // Draw date text with stroke for extra boldness
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 2;
             ctx.strokeText(dateText, leftMargin, dateY);
             ctx.fillText(dateText, leftMargin, dateY);
             
-            // Draw code text with stroke for extra boldness
             ctx.strokeText(codeText, leftMargin, codeY);
             ctx.fillText(codeText, leftMargin, codeY);
             
-            // Convert canvas to bytes
             return new Promise((resolve) => {
                 canvas.toBlob(async (blob) => {
                     const arrayBuffer = await blob.arrayBuffer();
@@ -400,53 +846,43 @@
                 const mergedPdf = await PDFDocument.create();
                 const dateStr = formatDate(document.getElementById('dateInput').value);
 
-                // Process each PDF
                 for (let i = 0; i < pdfFiles.length; i++) {
                     const pdfData = pdfFiles[i];
                     
-                    // Create stamped image with date and code
                     const stampedImageBytes = await createStampedImage(dateStr, pdfData.code);
                     
-                    // Load source PDF
                     const arrayBuffer = await pdfData.file.arrayBuffer();
                     const sourcePdf = await PDFDocument.load(arrayBuffer);
                     
-                    // Copy all pages
                     const pageIndices = sourcePdf.getPageIndices();
                     const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
                     
-                    // Add pages and stamp first page only
                     for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
                         const page = copiedPages[pageIndex];
                         mergedPdf.addPage(page);
                         
-                        // Stamp only the first page
                         if (pageIndex === 0) {
-                            // Embed the stamped image for this PDF
                             const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
-                            
                             const { width, height } = page.getSize();
                             
-                            // Position: top right corner
                             const stampWidth = 150;
                             const stampHeight = 90;
-                            const margin = 30;
-                            const x = width - stampWidth - margin;
-                            const y = height - stampHeight - margin;
                             
-                            // Draw stamp on page with more saturation
+                            // Use locked settings
+                            const x = stampSettings.x;
+                            const y = height - stampSettings.y - stampHeight;
+                            
                             page.drawImage(stampImg, {
                                 x: x,
                                 y: y,
                                 width: stampWidth,
                                 height: stampHeight,
-                                opacity: 0.5
+                                opacity: stampSettings.opacity
                             });
                         }
                     }
                 }
 
-                // Save and download
                 const pdfBytes = await mergedPdf.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
@@ -474,6 +910,10 @@
                 status.classList.remove('show');
             }, 3000);
         }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
 </body>
 </html>
