@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDFSTAMP — Certifying Destiny, One Document at a Time</title>
+    <title>PDFSTAMP — Professional Document Stamping</title>
     <style>
         * {
             margin: 0;
@@ -12,218 +12,188 @@
         }
 
         :root {
-            --primary: #0a84ff;
-            --primary-dark: #0066cc;
-            --success: #34c759;
-            --success-dark: #248a3d;
-            --bg-dark: #0a0a0a;
-            --bg-darker: #050505;
-            --text-primary: #ffffff;
-            --text-secondary: #8e8e93;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-black: #000000;
+            --bg-card: #0a0a0a;
+            --border-gray: #333333;
+            --text-white: #ffffff;
+            --text-gray: #999999;
+            --text-dark-gray: #666666;
+            --hover-bg: #1a1a1a;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, var(--bg-darker) 0%, #1a1a2e 50%, #16213e 100%);
-            color: var(--text-primary);
+            background: var(--bg-black);
+            color: var(--text-white);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Animated Background */
-        body::before {
-            content: '';
+        /* Header */
+        .header {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(10, 132, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(52, 199, 89, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+            right: 0;
+            background: var(--bg-black);
+            border-bottom: 1px solid var(--border-gray);
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
-        /* Header/Hero Section */
-        .hero {
-            position: relative;
-            text-align: center;
-            padding: 80px 20px 60px;
-            background: linear-gradient(180deg, rgba(10, 132, 255, 0.1) 0%, transparent 100%);
-            border-bottom: 1px solid var(--glass-border);
-            z-index: 1;
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .logo-container {
-            margin-bottom: 30px;
-            animation: fadeInDown 1s ease-out;
+        .logo-section {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 30px;
+            gap: 24px;
         }
 
-        .logo-image {
-            width: 120px;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(10, 132, 255, 0.3);
-            animation: float 3s ease-in-out infinite;
-            border: 2px solid var(--glass-border);
+        .logo-image, .stamp-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            transition: transform 0.3s;
         }
 
-        .logo {
-            font-size: 72px;
-            font-weight: 900;
-            letter-spacing: -2px;
-            background: linear-gradient(135deg, #0a84ff 0%, #00d4ff 50%, #34c759 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 80px rgba(10, 132, 255, 0.5);
-            position: relative;
-            display: inline-block;
+        .logo-image:hover, .stamp-image:hover {
+            transform: scale(1.05);
         }
 
-        .tagline {
-            font-size: 24px;
-            color: var(--text-secondary);
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-white);
+        }
+
+        .nav-link {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--text-white);
+        }
+
+        /* Hero */
+        .hero {
+            margin-top: 90px;
+            padding: 80px 40px 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .hero-title {
+            font-size: 56px;
             font-weight: 300;
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease-out 0.2s both;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
         }
 
         .hero-subtitle {
-            font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-            animation: fadeInUp 1s ease-out 0.4s both;
+            font-size: 18px;
+            color: var(--text-gray);
+            font-weight: 400;
         }
 
         /* Main Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 60px 20px;
-            position: relative;
-            z-index: 1;
+            padding: 60px 40px;
         }
 
         .section-title {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            margin: 16px auto 0;
-            border-radius: 2px;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            color: var(--text-gray);
         }
 
         .card {
-            background: var(--glass-bg);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
             padding: 40px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            transition: border-color 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(10, 132, 255, 0.2);
+            border-color: #555555;
         }
 
         .input-group {
-            margin-bottom: 28px;
+            margin-bottom: 32px;
         }
 
         label {
             display: block;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .date-input {
             width: 100%;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 16px;
-            transition: all 0.2s;
+            padding: 14px 16px;
+            background: var(--bg-black);
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            color: var(--text-white);
+            font-size: 15px;
+            transition: border-color 0.2s;
         }
 
         .date-input:focus {
             outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+            border-color: var(--text-white);
         }
 
         .upload-area {
             width: 100%;
             padding: 60px 30px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px dashed var(--glass-border);
-            border-radius: 16px;
+            background: var(--bg-black);
+            border: 2px dashed var(--border-gray);
+            border-radius: 4px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-area::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(10, 132, 255, 0.1) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: all 0.5s;
-        }
-
-        .upload-area:hover::before {
-            width: 300px;
-            height: 300px;
         }
 
         .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(10, 132, 255, 0.05);
-            transform: scale(1.02);
+            border-color: var(--text-white);
+            background: var(--hover-bg);
         }
 
         .upload-icon {
-            font-size: 56px;
+            font-size: 48px;
             margin-bottom: 16px;
-            animation: bounce 2s ease-in-out infinite;
+            color: var(--text-gray);
         }
 
         .upload-text {
-            color: var(--text-secondary);
-            font-size: 16px;
-            font-weight: 400;
+            color: var(--text-gray);
+            font-size: 14px;
         }
 
         #pdfInput {
@@ -238,97 +208,71 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 18px 22px;
+            background: var(--bg-black);
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            padding: 16px;
             margin-bottom: 12px;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
 
         .pdf-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(4px);
+            background: var(--hover-bg);
         }
 
         .pdf-icon {
-            font-size: 28px;
+            font-size: 20px;
+            color: var(--text-gray);
         }
 
         .pdf-name {
             flex: 1;
-            font-size: 15px;
+            font-size: 14px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-weight: 500;
         }
 
         .code-input {
             width: 200px;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 15px;
-            transition: all 0.2s;
+            padding: 10px 14px;
+            background: var(--bg-black);
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            color: var(--text-white);
+            font-size: 14px;
+            transition: border-color 0.2s;
         }
 
         .code-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+            border-color: var(--text-white);
         }
 
         .btn {
             width: 100%;
-            padding: 20px;
-            font-size: 17px;
+            padding: 16px;
+            font-size: 14px;
             font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
+            letter-spacing: 1.5px;
+            background: var(--bg-black);
+            border: 2px solid var(--text-white);
+            border-radius: 4px;
+            color: var(--text-white);
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+        .btn:hover:not(:disabled) {
+            background: var(--text-white);
+            color: var(--bg-black);
         }
 
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-start {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-primary);
-        }
-
-        .btn-start:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(10, 132, 255, 0.4);
-        }
-
-        .btn-start:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
+        .btn:disabled {
+            border-color: var(--border-gray);
+            color: var(--text-dark-gray);
             cursor: not-allowed;
-            transform: none;
         }
 
         /* Preview Section */
@@ -338,35 +282,35 @@
 
         .preview-section.active {
             display: block;
-            animation: fadeIn 0.5s ease-out;
         }
 
         .preview-header {
             margin-bottom: 24px;
-            text-align: center;
         }
 
         .preview-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .preview-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 13px;
+            color: var(--text-gray);
         }
 
         .preview-canvas-container {
             background: #ffffff;
-            border-radius: 16px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
             overflow: hidden;
             margin-bottom: 24px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 400px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         #previewCanvas {
@@ -384,46 +328,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 12px;
+            color: var(--text-gray);
             margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .slider {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            height: 4px;
+            background: var(--border-gray);
+            border-radius: 2px;
             outline: none;
             -webkit-appearance: none;
         }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--primary), var(--success));
+            width: 16px;
+            height: 16px;
+            background: var(--text-white);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(10, 132, 255, 0.5);
         }
 
         .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--primary), var(--success));
+            width: 16px;
+            height: 16px;
+            background: var(--text-white);
             border-radius: 50%;
             cursor: pointer;
             border: none;
-            box-shadow: 0 2px 8px rgba(10, 132, 255, 0.5);
         }
 
         .slider-value {
-            color: var(--text-primary);
-            font-size: 14px;
+            color: var(--text-white);
+            font-size: 12px;
             font-weight: 600;
         }
 
@@ -434,255 +375,178 @@
 
         .btn-next, .btn-generate {
             flex: 1;
-            padding: 18px;
-            font-size: 16px;
+            padding: 16px;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--text-primary);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-        }
-
-        .btn-next {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        }
-
-        .btn-next:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(10, 132, 255, 0.4);
-        }
-
-        .btn-generate {
-            background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
-        }
-
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
-        }
-
-        /* About Section */
-        .about-section {
-            background: linear-gradient(180deg, transparent 0%, rgba(10, 132, 255, 0.05) 100%);
-            padding: 60px 20px;
-            margin-top: 100px;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 1;
-        }
-
-        .about-toggle-container {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .btn-toggle-manifesto {
-            padding: 20px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.2), rgba(52, 199, 89, 0.2));
-            border: 2px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-primary);
+            letter-spacing: 1.5px;
+            background: var(--bg-black);
+            border: 2px solid var(--text-white);
+            border-radius: 4px;
+            color: var(--text-white);
             cursor: pointer;
-            transition: all 0.3s;
-            text-transform: none;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(10px);
+            transition: all 0.2s;
         }
 
-        .btn-toggle-manifesto:hover {
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.3), rgba(52, 199, 89, 0.3));
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(10, 132, 255, 0.3);
+        .btn-next:hover, .btn-generate:hover {
+            background: var(--text-white);
+            color: var(--bg-black);
         }
 
-        .btn-toggle-manifesto::after {
-            content: ' ▼';
-            display: inline-block;
-            transition: transform 0.3s;
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            overflow: auto;
+            padding: 40px 20px;
         }
 
-        .btn-toggle-manifesto.active::after {
-            transform: rotate(180deg);
-        }
-
-        .manifesto-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, opacity 0.3s ease-out;
-            opacity: 0;
-        }
-
-        .manifesto-content.active {
-            max-height: 10000px;
-            opacity: 1;
-            transition: max-height 1s ease-in, opacity 0.5s ease-in 0.2s;
-        }
-
-        .about-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .about-title {
-            font-size: 48px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(135deg, #fff 0%, #0a84ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .about-block {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-        }
-
-        .about-block h3 {
-            font-size: 32px;
-            margin-bottom: 24px;
+        .modal.show {
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: center;
         }
 
-        .about-block h3::before {
-            font-size: 40px;
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 48px;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
         }
 
-        .about-block p {
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 16px;
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 32px;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
         }
 
-        .about-block strong {
-            color: var(--primary);
-            font-weight: 600;
+        .modal-close:hover {
+            color: var(--text-white);
         }
 
-        .highlight {
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.2), rgba(52, 199, 89, 0.2));
-            padding: 30px;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            margin: 30px 0;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .tech-item {
-            background: rgba(10, 132, 255, 0.1);
-            padding: 20px;
-            border-radius: 12px;
+        .modal-logo {
             text-align: center;
-            border: 1px solid var(--glass-border);
+            margin-bottom: 48px;
+        }
+
+        .modal-logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        .founders-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .founder {
+            text-align: center;
+        }
+
+        .founder-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .founder-title {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .founder-bio {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        .manifesto-section {
+            border-top: 1px solid var(--border-gray);
+            padding-top: 48px;
+        }
+
+        .manifesto-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .manifesto-block {
+            margin-bottom: 32px;
+        }
+
+        .manifesto-block h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .manifesto-block p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 12px;
         }
 
         /* Footer */
         .footer {
-            background: var(--bg-darker);
-            border-top: 1px solid var(--glass-border);
-            padding: 60px 20px 40px;
+            border-top: 1px solid var(--border-gray);
+            padding: 48px 40px;
             text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-size: 36px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .footer-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .footer-legal {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid var(--glass-border);
+            color: var(--text-dark-gray);
+            line-height: 1.8;
+            margin-bottom: 16px;
         }
 
+        /* Status */
         .status {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.95);
-            color: var(--text-primary);
-            padding: 18px 36px;
-            border-radius: 12px;
-            font-size: 15px;
-            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            color: var(--text-white);
+            padding: 16px 32px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            font-size: 13px;
             display: none;
             z-index: 1001;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
         .status.show {
             display: block;
             animation: slideUp 0.3s ease-out;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         @keyframes slideUp {
@@ -696,40 +560,44 @@
             }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(-50%) rotate(-10deg); }
-            50% { transform: translateY(-60%) rotate(-10deg); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .logo-container {
-                flex-direction: column;
-                gap: 20px;
+            .header-content {
+                padding: 16px 20px;
             }
 
-            .logo-image {
-                width: 80px;
+            .logo-section {
+                gap: 12px;
             }
 
-            .logo {
-                font-size: 48px;
+            .logo-image, .stamp-image {
+                width: 36px;
+                height: 36px;
             }
 
-            .tagline {
+            .logo-text {
                 font-size: 20px;
             }
 
-            .section-title {
-                font-size: 28px;
+            .hero {
+                padding: 60px 20px 40px;
+                margin-top: 70px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 40px 20px;
             }
 
             .card {
-                padding: 30px 20px;
+                padding: 24px;
             }
 
             .pdf-item {
@@ -745,33 +613,34 @@
                 flex-direction: column;
             }
 
-            .about-block {
-                padding: 30px 20px;
+            .founders-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
             }
 
-            .about-block h3 {
-                font-size: 24px;
-            }
-
-            .about-block p {
-                font-size: 16px;
-            }
-
-            .about-title {
-                font-size: 36px;
+            .modal-content {
+                padding: 32px 24px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="logo-container">
-            <img src="logo.png" alt="PDFSTAMP Logo" class="logo-image">
-            <div class="logo">PDFSTAMP</div>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="logo.png" alt="Logo" class="logo-image">
+                <div class="logo-text">PDFSTAMP</div>
+                <img src="stamp pci.jpg" alt="Stamp" class="stamp-image">
+            </div>
+            <a class="nav-link" id="aboutLink">About Us</a>
         </div>
-        <p class="tagline">Certifying Destiny, One Document at a Time</p>
-        <p class="hero-subtitle">The world's most advanced, AI-enhanced, family-owned PDF stamping technology</p>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1 class="hero-title">Professional Document Stamping</h1>
+        <p class="hero-subtitle">Stamp and certify multiple PDFs with custom codes and dates</p>
     </div>
 
     <!-- Main Application -->
@@ -780,7 +649,7 @@
 
         <div class="card">
             <div class="input-group">
-                <label for="dateInput">Select Date</label>
+                <label for="dateInput">Date</label>
                 <input type="date" id="dateInput" class="date-input">
             </div>
 
@@ -788,7 +657,7 @@
                 <label>Upload PDF Files</label>
                 <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
                     <div class="upload-icon">📄</div>
-                    <div class="upload-text">Click to select PDF files or drag & drop</div>
+                    <div class="upload-text">Click to select PDF files</div>
                 </div>
                 <input type="file" id="pdfInput" accept=".pdf" multiple>
             </div>
@@ -796,14 +665,14 @@
             <div id="pdfList" class="pdf-list"></div>
         </div>
 
-        <button id="startBtn" class="btn btn-start" disabled>Start Positioning Stamps</button>
+        <button id="startBtn" class="btn" disabled>Position Stamps</button>
 
         <!-- Preview Section -->
         <div id="previewSection" class="card preview-section">
             <div class="preview-header">
                 <div class="preview-title" id="previewTitle">Position Stamp</div>
-                <div class="preview-subtitle">Drag the stamp to position it perfectly</div>
-    </div>
+                <div class="preview-subtitle">Drag the stamp to position it on the document</div>
+            </div>
 
             <div class="preview-canvas-container">
                 <canvas id="previewCanvas"></canvas>
@@ -818,123 +687,70 @@
             </div>
 
             <div class="preview-actions">
-                <button class="btn-next" id="nextBtn">Next PDF →</button>
-                <button class="btn-generate" id="generateBtn" style="display: none;">✓ Generate Combined PDF</button>
+                <button class="btn-next" id="nextBtn">Next PDF</button>
+                <button class="btn-generate" id="generateBtn" style="display: none;">Generate PDF</button>
             </div>
         </div>
     </div>
 
-    <!-- About Section -->
-    <div class="about-section">
-        <div class="about-container">
-            <div class="about-toggle-container">
-                <button class="btn-toggle-manifesto" id="toggleManifesto">
-                    Wait... what even is this?
-                </button>
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAboutModal()">&times;</button>
+            
+            <div class="modal-logo">
+                <img src="logo.png" alt="PDFSTAMP Logo">
             </div>
 
-            <div class="manifesto-content" id="manifestoContent">
-                <h2 class="about-title">The PDFSTAMP Story</h2>
-
-                <div class="about-block">
-                <h3>🧭 Our Mission</h3>
-                <p>At <strong>PDFSTAMP</strong>, we don't just stamp PDFs — we stamp history.</p>
-                <p>Born from a single-page app and a dream, PDFSTAMP exists to bridge the gap between human authenticity and digital permanence. In an age where trust is tokenized, and AI rewrites reality, our stamps stand as the immutable proof of presence — a cryptographic handshake between the physical and digital world.</p>
-                <div class="highlight">
-                    <p><strong>We believe every PDF deserves its moment of truth.</strong></p>
-                    <p>That's why we built the world's most hyperlocal, family-owned, AI-enhanced, blockchain-optional stamping technology.</p>
+            <div class="founders-grid">
+                <div class="founder">
+                    <div class="founder-name">Ramon</div>
+                    <div class="founder-title">Co-Founder</div>
+                    <p class="founder-bio">Ramon brings vision and technical expertise to PDFSTAMP. With a background in document processing and a passion for elegant solutions, he helps shape the future of digital certification.</p>
                 </div>
-                <p>We're not in the business of marking documents. <strong>We're in the business of certifying destiny.</strong></p>
-            </div>
-
-            <div class="about-block">
-                <h3>🏗️ Our Origin Story</h3>
-                <p>It started, like all great revolutions, in a half-furnished office with flickering fluorescent lights, two ergonomic chairs, and a dream.</p>
-                <p>Two visionaries sat side-by-side — one holding a phone, the other a printed PDF — and asked the question that would redefine the digital landscape forever:</p>
-                <div class="highlight">
-                    <p><em>"What if… we stamped PDFs… but, like, really well?"</em></p>
-                </div>
-                <p>From that moment, the seed of PDFSTAMP was planted. What began as a side project coded in an hour became a movement — a <strong>generational family business</strong> powered by love, espresso, and CSS flexbox.</p>
-                <p>Today, PDFSTAMP operates at the intersection of AI, trust, and vibes.</p>
-                <p>We're proud to remain <strong>100% independently funded</strong> — no VC, no ICO, just pure belief and a Venmo subscription.</p>
-            </div>
-
-            <div class="about-block">
-                <h3>🤖 The Technology</h3>
-                <p>Under the hood, PDFSTAMP is powered by:</p>
-                <div class="tech-grid">
-                    <div class="tech-item">
-                        <strong>Neural Seal™</strong><br>
-                        <small>(patent pending… probably)</small>
-                    </div>
-                    <div class="tech-item">
-                        <strong>Localhost Consensus</strong><br>
-                        <small>Cutting-edge</small>
-                    </div>
-                    <div class="tech-item">
-                        <strong>Proof-of-Document</strong><br>
-                        <small>PoD Protocol</small>
-                    </div>
-                    <div class="tech-item">
-                        <strong>Family Values</strong><br>
-                        <small>Core technology</small>
-                    </div>
-                </div>
-                <p>Every stamp is a micro-moment of innovation — combining cutting-edge automation with hand-crafted precision passed down through generations of document artisans.</p>
-                <div class="highlight">
-                    <p><strong>We don't just use JavaScript. We infuse intention into every async call.</strong></p>
+                <div class="founder">
+                    <div class="founder-name">Matt</div>
+                    <div class="founder-title">Co-Founder</div>
+                    <p class="founder-bio">Matt combines product design with engineering precision. His focus on user experience ensures PDFSTAMP remains intuitive, powerful, and trusted by professionals worldwide.</p>
                 </div>
             </div>
 
-            <div class="about-block">
-                <h3>💡 Why It Matters</h3>
-                <p>Because authenticity isn't dead — it's just been rebranded.</p>
-                <p>In a world of AI-generated contracts and metaverse NDAs, you deserve to know what's real. PDFSTAMP gives you that certainty with a simple click — delivering tamper-proof verification, impeccable vibes, and a faint smell of fresh toner.</p>
-                <p><strong>Each stamp is not just a mark; it's a movement.</strong><br>
-                Each user isn't a client; they're a co-creator in the trust economy.</p>
-            </div>
+            <div class="manifesto-section">
+                <h2 class="manifesto-title">Our Story</h2>
 
-            <div class="about-block">
-                <h3>🌍 The Vision</h3>
-                <p>By 2030, PDFSTAMP aims to <strong>stamp every PDF on the planet</strong>.</p>
-                <p>From international treaties to PTA permission slips, from corporate mergers to dog adoption forms — we envision a future where every document is sealed with love, lineage, and latent AI potential.</p>
-                <div class="highlight">
-                    <p><strong>We're building the future of proof — one over-engineered API call at a time.</strong></p>
+                <div class="manifesto-block">
+                    <h3>Mission</h3>
+                    <p>At PDFSTAMP, we bridge the gap between human authenticity and digital permanence. In an age where trust is essential, our stamps stand as immutable proof of presence—a handshake between the physical and digital world.</p>
+                    <p>We believe every PDF deserves its moment of truth. That's why we built professional, reliable stamping technology for businesses and individuals who value authenticity.</p>
                 </div>
-            </div>
 
-            <div class="about-block">
-                <h3>🕯️ Our Promise</h3>
-                <p><strong>We will never sell your data.</strong><br>
-                <strong>We will never pivot to NFTs.</strong><br>
-                <strong>We will never forget where we came from</strong> — that cramped office with two guys, two chairs, and one dream:</p>
-                <div class="highlight">
-                    <p><em>To stamp PDFs beautifully.</em></p>
+                <div class="manifesto-block">
+                    <h3>Origin</h3>
+                    <p>PDFSTAMP started with a simple question: "What if we could stamp PDFs really well?"</p>
+                    <p>From that moment, what began as a side project became a professional tool—powered by attention to detail, user feedback, and a commitment to quality.</p>
+                    <p>Today, PDFSTAMP operates at the intersection of simplicity and power, helping professionals certify documents with confidence.</p>
                 </div>
-            </div>
+
+                <div class="manifesto-block">
+                    <h3>Vision</h3>
+                    <p>We envision a future where every document can be certified with confidence—from international contracts to local agreements, from corporate mergers to personal records.</p>
+                    <p>PDFSTAMP aims to be the trusted standard for document certification, making authenticity accessible to everyone.</p>
+                </div>
+
+                <div class="manifesto-block">
+                    <h3>Promise</h3>
+                    <p>We are committed to privacy-first principles. Your documents are processed locally in your browser—we never see, store, or transmit your files.</p>
+                    <p>We will never sell your data. We will never compromise on security. We remain focused on one thing: helping you certify documents with trust and confidence.</p>
+                    <p>PDFSTAMP is a tool built by professionals, for professionals.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">PDFSTAMP</div>
-            <p class="footer-text">
-                Built with love, intention, and an unhealthy amount of attention to detail.<br>
-                Stamping documents since [REDACTED]. Changing lives since always.
-            </p>
-            <p class="footer-text">
-                For support, inquiries, or existential questions about document authenticity,<br>
-                reach out to us in the multiverse.
-            </p>
-            <div class="footer-legal">
-                <p>© 2025 PDFSTAMP™. All rights reserved. Patents pending. Vibes certified.</p>
-                <p>Terms of Service | Privacy Policy | Proof-of-Document Protocol | Family Values Charter</p>
-                <p>No PDFs were harmed in the making of this application.</p>
-                <p>This is a family business. Please respect the craft.</p>
-            </div>
-        </div>
+        <p class="footer-text">© 2025 PDFSTAMP. All rights reserved.</p>
+        <p class="footer-text">Professional document stamping tool. Privacy-first. Built with care.</p>
     </div>
 
     <div id="status" class="status"></div>
@@ -953,6 +769,22 @@
         let dragOffset = { x: 0, y: 0 };
         let canvasScale = 1;
 
+        // About modal
+        document.getElementById('aboutLink').addEventListener('click', function() {
+            document.getElementById('aboutModal').classList.add('show');
+        });
+
+        function closeAboutModal() {
+            document.getElementById('aboutModal').classList.remove('show');
+        }
+
+        // Close modal on background click
+        document.getElementById('aboutModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAboutModal();
+            }
+        });
+
         async function loadStampImage() {
             try {
                 showStatus('Loading stamp image...');
@@ -960,20 +792,20 @@
                 if (!response.ok) throw new Error('Could not load stamp pci.jpg');
                 
                 const blob = await response.blob();
-                    const reader = new FileReader();
+                const reader = new FileReader();
                 
                 reader.onload = function(event) {
                     const img = new Image();
                     img.onload = function() {
                         stampImage = img;
-                        showStatus('✓ Ready! Stamp image loaded.');
+                        showStatus('Ready');
                     };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(blob);
                 
             } catch (error) {
-                showStatus('ERROR: Could not load stamp pci.jpg');
+                showStatus('ERROR: Could not load stamp image');
                 console.error(error);
             }
         }
@@ -984,8 +816,8 @@
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
 
-            pdfFiles = files.map(file => ({
-                file: file,
+            pdfFiles = files.map(file => ({ 
+                file: file, 
                 code: '',
                 stampX: null,
                 stampY: null,
@@ -1023,7 +855,7 @@
                     pdfData.code = e.target.value;
                     updateStartButton();
                 });
-
+                
                 item.appendChild(icon);
                 item.appendChild(name);
                 item.appendChild(input);
@@ -1272,18 +1104,18 @@
                     
                     const pageIndices = sourcePdf.getPageIndices();
                     const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
-
+                    
                     for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
                         const page = copiedPages[pageIndex];
                         mergedPdf.addPage(page);
-
+                        
                         if (pageIndex === 0) {
                             const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
                             const { width, height } = page.getSize();
-
+                            
                             const stampWidth = 150;
                             const stampHeight = 90;
-
+                            
                             const x = pdfData.stampX / canvasScale;
                             const y = height - (pdfData.stampY / canvasScale) - stampHeight;
                             
@@ -1308,7 +1140,7 @@
                 a.click();
                 
                 URL.revokeObjectURL(url);
-                showStatus('✓ PDF generated successfully!');
+                showStatus('PDF generated successfully');
 
             } catch (error) {
                 showStatus('Error: ' + error.message);
@@ -1324,24 +1156,6 @@
                 status.classList.remove('show');
             }, 3000);
         }
-
-        // Manifesto toggle
-        document.getElementById('toggleManifesto').addEventListener('click', function() {
-            const manifestoContent = document.getElementById('manifestoContent');
-            const toggleBtn = this;
-            
-            manifestoContent.classList.toggle('active');
-            toggleBtn.classList.toggle('active');
-            
-            if (manifestoContent.classList.contains('active')) {
-                toggleBtn.textContent = 'Hide the Manifesto';
-            setTimeout(() => {
-                    manifestoContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-            } else {
-                toggleBtn.textContent = 'Wait... what even is this?';
-            }
-        });
     </script>
 </body>
 </html>
