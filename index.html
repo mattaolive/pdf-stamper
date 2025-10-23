@@ -60,6 +60,19 @@
         .logo-container {
             margin-bottom: 30px;
             animation: fadeInDown 1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .logo-image {
+            width: 120px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(10, 132, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+            border: 2px solid var(--glass-border);
         }
 
         .logo {
@@ -73,16 +86,6 @@
             text-shadow: 0 0 80px rgba(10, 132, 255, 0.5);
             position: relative;
             display: inline-block;
-        }
-
-        .logo::before {
-            content: '📄';
-            position: absolute;
-            left: -90px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-10deg);
-            font-size: 60px;
-            animation: float 3s ease-in-out infinite;
         }
 
         .tagline {
@@ -464,11 +467,60 @@
         /* About Section */
         .about-section {
             background: linear-gradient(180deg, transparent 0%, rgba(10, 132, 255, 0.05) 100%);
-            padding: 100px 20px;
+            padding: 60px 20px;
             margin-top: 100px;
             border-top: 1px solid var(--glass-border);
             position: relative;
             z-index: 1;
+        }
+
+        .about-toggle-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .btn-toggle-manifesto {
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(10, 132, 255, 0.2), rgba(52, 199, 89, 0.2));
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-toggle-manifesto:hover {
+            background: linear-gradient(135deg, rgba(10, 132, 255, 0.3), rgba(52, 199, 89, 0.3));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(10, 132, 255, 0.3);
+        }
+
+        .btn-toggle-manifesto::after {
+            content: ' ▼';
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .btn-toggle-manifesto.active::after {
+            transform: rotate(180deg);
+        }
+
+        .manifesto-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .manifesto-content.active {
+            max-height: 10000px;
+            opacity: 1;
+            transition: max-height 1s ease-in, opacity 0.5s ease-in 0.2s;
         }
 
         .about-container {
@@ -655,13 +707,17 @@
         }
 
         @media (max-width: 768px) {
-            .logo {
-                font-size: 48px;
+            .logo-container {
+                flex-direction: column;
+                gap: 20px;
             }
 
-            .logo::before {
-                left: -70px;
-                font-size: 40px;
+            .logo-image {
+                width: 80px;
+            }
+
+            .logo {
+                font-size: 48px;
             }
 
             .tagline {
@@ -711,6 +767,7 @@
     <!-- Hero Section -->
     <div class="hero">
         <div class="logo-container">
+            <img src="stamp pci.jpg" alt="PDFSTAMP Logo" class="logo-image">
             <div class="logo">PDFSTAMP</div>
         </div>
         <p class="tagline">Certifying Destiny, One Document at a Time</p>
@@ -746,7 +803,7 @@
             <div class="preview-header">
                 <div class="preview-title" id="previewTitle">Position Stamp</div>
                 <div class="preview-subtitle">Drag the stamp to position it perfectly</div>
-            </div>
+    </div>
 
             <div class="preview-canvas-container">
                 <canvas id="previewCanvas"></canvas>
@@ -770,9 +827,16 @@
     <!-- About Section -->
     <div class="about-section">
         <div class="about-container">
-            <h2 class="about-title">The PDFSTAMP Story</h2>
+            <div class="about-toggle-container">
+                <button class="btn-toggle-manifesto" id="toggleManifesto">
+                    Wait... what even is this?
+                </button>
+            </div>
 
-            <div class="about-block">
+            <div class="manifesto-content" id="manifestoContent">
+                <h2 class="about-title">The PDFSTAMP Story</h2>
+
+                <div class="about-block">
                 <h3>🧭 Our Mission</h3>
                 <p>At <strong>PDFSTAMP</strong>, we don't just stamp PDFs — we stamp history.</p>
                 <p>Born from a single-page app and a dream, PDFSTAMP exists to bridge the gap between human authenticity and digital permanence. In an age where trust is tokenized, and AI rewrites reality, our stamps stand as the immutable proof of presence — a cryptographic handshake between the physical and digital world.</p>
@@ -848,6 +912,7 @@
                     <p><em>To stamp PDFs beautifully.</em></p>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 
@@ -895,7 +960,7 @@
                 if (!response.ok) throw new Error('Could not load stamp pci.jpg');
                 
                 const blob = await response.blob();
-                const reader = new FileReader();
+                    const reader = new FileReader();
                 
                 reader.onload = function(event) {
                     const img = new Image();
@@ -919,8 +984,8 @@
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
 
-            pdfFiles = files.map(file => ({ 
-                file: file, 
+            pdfFiles = files.map(file => ({
+                file: file,
                 code: '',
                 stampX: null,
                 stampY: null,
@@ -958,7 +1023,7 @@
                     pdfData.code = e.target.value;
                     updateStartButton();
                 });
-                
+
                 item.appendChild(icon);
                 item.appendChild(name);
                 item.appendChild(input);
@@ -1207,18 +1272,18 @@
                     
                     const pageIndices = sourcePdf.getPageIndices();
                     const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
-                    
+
                     for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
                         const page = copiedPages[pageIndex];
                         mergedPdf.addPage(page);
-                        
+
                         if (pageIndex === 0) {
                             const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
                             const { width, height } = page.getSize();
-                            
+
                             const stampWidth = 150;
                             const stampHeight = 90;
-                            
+
                             const x = pdfData.stampX / canvasScale;
                             const y = height - (pdfData.stampY / canvasScale) - stampHeight;
                             
@@ -1259,6 +1324,24 @@
                 status.classList.remove('show');
             }, 3000);
         }
+
+        // Manifesto toggle
+        document.getElementById('toggleManifesto').addEventListener('click', function() {
+            const manifestoContent = document.getElementById('manifestoContent');
+            const toggleBtn = this;
+            
+            manifestoContent.classList.toggle('active');
+            toggleBtn.classList.toggle('active');
+            
+            if (manifestoContent.classList.contains('active')) {
+                toggleBtn.textContent = 'Hide the Manifesto';
+            setTimeout(() => {
+                    manifestoContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else {
+                toggleBtn.textContent = 'Wait... what even is this?';
+            }
+        });
     </script>
 </body>
 </html>
