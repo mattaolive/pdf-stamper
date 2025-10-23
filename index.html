@@ -41,56 +41,77 @@
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 40px;
+            padding: 30px 40px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 24px;
+            position: relative;
         }
 
         .logo-image, .stamp-image {
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            transition: transform 0.3s;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .logo-image {
+            left: 80px;
+            animation-delay: 0s;
+        }
+
+        .stamp-image {
+            right: 80px;
+            animation-delay: 2s;
         }
 
         .logo-image:hover, .stamp-image:hover {
-            transform: scale(1.05);
+            transform: scale(1.15) rotate(5deg);
+            filter: brightness(1.2);
         }
 
         .logo-text {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 4px;
             color: var(--text-white);
+            text-align: center;
+            position: relative;
+            animation: glow 3s ease-in-out infinite;
         }
 
-        .nav-link {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.2s;
-            cursor: pointer;
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
         }
 
-        .nav-link:hover {
-            color: var(--text-white);
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(255, 255, 255, 0.2),
+                    0 0 30px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.5),
+                    0 0 40px rgba(255, 255, 255, 0.3),
+                    0 0 60px rgba(255, 255, 255, 0.2);
+            }
         }
 
         /* Hero */
         .hero {
-            margin-top: 90px;
+            margin-top: 140px;
             padding: 80px 40px 60px;
             text-align: center;
             border-bottom: 1px solid var(--border-gray);
@@ -563,25 +584,27 @@
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
-                padding: 16px 20px;
-            }
-
-            .logo-section {
-                gap: 12px;
+                padding: 20px;
+                flex-direction: column;
+                gap: 20px;
             }
 
             .logo-image, .stamp-image {
-                width: 36px;
-                height: 36px;
+                width: 50px;
+                height: 50px;
+                position: relative;
+                left: auto;
+                right: auto;
             }
 
             .logo-text {
-                font-size: 20px;
+                font-size: 36px;
+                letter-spacing: 2px;
             }
 
             .hero {
                 padding: 60px 20px 40px;
-                margin-top: 70px;
+                margin-top: 200px;
             }
 
             .hero-title {
@@ -628,12 +651,9 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="logo-section">
-                <img src="logo.png" alt="Logo" class="logo-image">
-                <div class="logo-text">PDFSTAMP</div>
-                <img src="stamp pci.jpg" alt="Stamp" class="stamp-image">
-            </div>
-            <a class="nav-link" id="aboutLink">About Us</a>
+            <img src="logo.png" alt="Logo" class="logo-image" id="logoImage">
+            <div class="logo-text">PDFSTAMP</div>
+            <img src="stamp pci.jpg" alt="Stamp" class="stamp-image" id="stampImage">
         </div>
     </div>
 
@@ -769,8 +789,12 @@
         let dragOffset = { x: 0, y: 0 };
         let canvasScale = 1;
 
-        // About modal
-        document.getElementById('aboutLink').addEventListener('click', function() {
+        // About modal - open from both images
+        document.getElementById('logoImage').addEventListener('click', function() {
+            document.getElementById('aboutModal').classList.add('show');
+        });
+
+        document.getElementById('stampImage').addEventListener('click', function() {
             document.getElementById('aboutModal').classList.add('show');
         });
 
@@ -792,7 +816,7 @@
                 if (!response.ok) throw new Error('Could not load stamp pci.jpg');
                 
                 const blob = await response.blob();
-                const reader = new FileReader();
+                    const reader = new FileReader();
                 
                 reader.onload = function(event) {
                     const img = new Image();
@@ -816,8 +840,8 @@
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
 
-            pdfFiles = files.map(file => ({ 
-                file: file, 
+            pdfFiles = files.map(file => ({
+                file: file,
                 code: '',
                 stampX: null,
                 stampY: null,
@@ -855,7 +879,7 @@
                     pdfData.code = e.target.value;
                     updateStartButton();
                 });
-                
+
                 item.appendChild(icon);
                 item.appendChild(name);
                 item.appendChild(input);
@@ -1104,15 +1128,15 @@
                     
                     const pageIndices = sourcePdf.getPageIndices();
                     const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
-                    
+
                     for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
                         const page = copiedPages[pageIndex];
                         mergedPdf.addPage(page);
-                        
+
                         if (pageIndex === 0) {
                             const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
                             const { width, height } = page.getSize();
-                            
+
                             const stampWidth = 150;
                             const stampHeight = 90;
                             
