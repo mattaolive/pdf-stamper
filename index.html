@@ -170,70 +170,50 @@
             cursor: not-allowed;
         }
 
-        /* Preview Modal */
-        .modal {
+        /* Preview Section */
+        .preview-section {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            overflow: auto;
-            padding: 20px;
         }
 
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .preview-section.active {
+            display: block;
         }
 
-        .modal-content {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 32px;
-            max-width: 1000px;
-            width: 100%;
+        .preview-header {
+            margin-bottom: 16px;
         }
 
-        .modal-header {
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 400;
+        .preview-title {
+            font-size: 18px;
+            font-weight: 500;
             margin-bottom: 8px;
         }
 
-        .modal-subtitle {
+        .preview-subtitle {
             font-size: 14px;
             color: #8e8e93;
         }
 
         .preview-canvas-container {
             background: #ffffff;
-            border-radius: 8px;
-            position: relative;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 400px;
         }
 
         #previewCanvas {
-            max-width: 100%;
             display: block;
             cursor: move;
+            max-width: 100%;
+            height: auto;
         }
 
         .opacity-control {
-            margin-bottom: 24px;
-            text-align: center;
+            margin-bottom: 20px;
         }
 
         .opacity-label {
@@ -245,7 +225,6 @@
 
         .slider {
             width: 100%;
-            max-width: 400px;
             height: 6px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
@@ -273,13 +252,13 @@
         }
 
         .slider-value {
-            display: block;
-            margin-top: 8px;
+            display: inline-block;
+            margin-left: 12px;
             color: #ffffff;
             font-size: 14px;
         }
 
-        .modal-actions {
+        .preview-actions {
             display: flex;
             gap: 12px;
         }
@@ -344,7 +323,7 @@
             .code-input {
                 width: 100%;
             }
-            .modal-actions {
+            .preview-actions {
                 flex-direction: column;
             }
         }
@@ -376,27 +355,27 @@
         </div>
 
         <button id="startBtn" class="btn-start" disabled>Start Positioning Stamps</button>
-    </div>
 
-    <!-- Preview Modal -->
-    <div id="previewModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Position Stamp</h2>
-                <p class="modal-subtitle">Drag the stamp to position it, then click Next</p>
+        <!-- Preview Section -->
+        <div id="previewSection" class="card preview-section">
+            <div class="preview-header">
+                <div class="preview-title" id="previewTitle">Position Stamp</div>
+                <div class="preview-subtitle">Drag the stamp to position it</div>
             </div>
-            
+
             <div class="preview-canvas-container">
                 <canvas id="previewCanvas"></canvas>
             </div>
 
             <div class="opacity-control">
-                <label class="opacity-label">Stamp Opacity</label>
+                <label class="opacity-label">
+                    Stamp Opacity
+                    <span class="slider-value" id="opacityValue">50%</span>
+                </label>
                 <input type="range" id="opacitySlider" class="slider" min="10" max="100" value="50">
-                <span class="slider-value" id="opacityValue">50%</span>
             </div>
 
-            <div class="modal-actions">
+            <div class="preview-actions">
                 <button class="btn-next" id="nextBtn">Next PDF</button>
                 <button class="btn-generate" id="generateBtn" style="display: none;">Generate Combined PDF</button>
             </div>
@@ -515,6 +494,7 @@
         // Start positioning
         document.getElementById('startBtn').addEventListener('click', async function() {
             currentPdfIndex = 0;
+            document.getElementById('previewSection').classList.add('active');
             await showPdfPreview(currentPdfIndex);
         });
 
@@ -533,10 +513,9 @@
                 const canvas = document.getElementById('previewCanvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Calculate scale to fit in modal
+                // Scale down to fit nicely - about 50% size
                 const viewport = page.getViewport({ scale: 1 });
-                const maxWidth = 900;
-                canvasScale = Math.min(maxWidth / viewport.width, 1.5);
+                canvasScale = 0.6; // Fixed smaller scale
                 const scaledViewport = page.getViewport({ scale: canvasScale });
                 
                 canvas.width = scaledViewport.width;
@@ -549,8 +528,9 @@
                 
                 // Set default stamp position if not set
                 if (pdfData.stampX === null) {
-                    pdfData.stampX = canvas.width - 150 - 30;
-                    pdfData.stampY = 30;
+                    const stampWidth = 150 * canvasScale;
+                    pdfData.stampX = canvas.width - stampWidth - (30 * canvasScale);
+                    pdfData.stampY = 30 * canvasScale;
                 }
                 
                 // Set opacity slider
@@ -560,9 +540,8 @@
                 // Draw stamp
                 await drawStampOnCanvas();
                 
-                // Update modal
-                document.getElementById('modalTitle').textContent = `PDF ${index + 1} of ${pdfFiles.length}: ${pdfData.file.name}`;
-                document.getElementById('previewModal').classList.add('show');
+                // Update header
+                document.getElementById('previewTitle').textContent = `PDF ${index + 1} of ${pdfFiles.length}: ${pdfData.file.name}`;
                 
                 // Show correct button
                 if (index === pdfFiles.length - 1) {
@@ -635,8 +614,8 @@
             // Draw on main canvas with opacity
             ctx.globalAlpha = pdfData.opacity;
             
-            const stampWidth = 150;
-            const stampHeight = 90;
+            const stampWidth = 150 * canvasScale;
+            const stampHeight = 90 * canvasScale;
             
             ctx.drawImage(stampCanvas, pdfData.stampX, pdfData.stampY, stampWidth, stampHeight);
             ctx.globalAlpha = 1.0;
@@ -658,8 +637,8 @@
             const y = e.clientY - rect.top;
             const pdfData = pdfFiles[currentPdfIndex];
             
-            const stampWidth = 150;
-            const stampHeight = 90;
+            const stampWidth = 150 * canvasScale;
+            const stampHeight = 90 * canvasScale;
             
             if (x >= pdfData.stampX && x <= pdfData.stampX + stampWidth &&
                 y >= pdfData.stampY && y <= pdfData.stampY + stampHeight) {
@@ -745,7 +724,6 @@
 
         // Generate combined PDF
         document.getElementById('generateBtn').addEventListener('click', async function() {
-            document.getElementById('previewModal').classList.remove('show');
             showStatus('Generating PDF...');
 
             try {
@@ -776,9 +754,6 @@
                             const stampHeight = 90;
                             
                             // Convert canvas coordinates to PDF coordinates
-                            const scaleX = width / (canvasScale * width);
-                            const scaleY = height / (canvasScale * height);
-                            
                             const x = pdfData.stampX / canvasScale;
                             const y = height - (pdfData.stampY / canvasScale) - stampHeight;
                             
