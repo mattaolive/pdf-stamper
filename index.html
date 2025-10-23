@@ -26,6 +26,26 @@
             background: var(--bg-black);
             color: var(--text-white);
             line-height: 1.6;
+            position: relative;
+        }
+
+        /* Logo Watermark Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.03;
+            filter: invert(1) blur(1px);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Header */
@@ -37,68 +57,43 @@
             background: var(--bg-black);
             border-bottom: 1px solid var(--border-gray);
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 40px;
+            padding: 24px 40px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .logo-container:hover {
-            opacity: 0.8;
-        }
-
-        .logo-image {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
         }
 
         .logo-text {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-white);
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #ffffff 0%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         }
 
-        /* Hero */
-        .hero {
-            margin-top: 100px;
-            padding: 80px 40px 60px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-gray);
-        }
-
-        .hero-title {
-            font-size: 56px;
-            font-weight: 300;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
-        .hero-subtitle {
-            font-size: 18px;
-            color: var(--text-gray);
-            font-weight: 400;
+        .logo-text:hover {
+            letter-spacing: 6px;
+            filter: brightness(1.2);
         }
 
         /* Main Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 60px 40px;
+            padding: 120px 40px 60px;
+            position: relative;
+            z-index: 1;
         }
 
         .section-title {
@@ -394,7 +389,7 @@
 
         .modal.show {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
 
@@ -402,10 +397,10 @@
             background: var(--bg-card);
             border: 1px solid var(--border-gray);
             border-radius: 8px;
-            padding: 48px;
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
             position: relative;
+            margin-top: 40px;
         }
 
         .modal-close {
@@ -420,10 +415,10 @@
             padding: 12px 24px;
             border-radius: 4px;
             cursor: pointer;
-            line-height: 1;
             transition: all 0.2s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 10;
         }
 
         .modal-close:hover {
@@ -431,21 +426,49 @@
             color: var(--bg-black);
         }
 
-        .modal-logo {
+        /* Logo Section in Modal */
+        .modal-logo-section {
+            background: #f0f0f0;
+            padding: 60px 40px;
             text-align: center;
-            margin-bottom: 48px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid var(--border-gray);
         }
 
-        .modal-logo img {
-            width: 200px;
+        .modal-logo-section img {
+            width: 280px;
             height: auto;
+            max-width: 100%;
+        }
+
+        /* Modal Content Area */
+        .modal-body {
+            padding: 60px 48px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal-subtitle {
+            font-size: 16px;
+            color: var(--text-gray);
+            text-align: center;
+            margin-bottom: 48px;
         }
 
         .founders-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 48px;
-            margin-bottom: 48px;
+            margin-bottom: 60px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border-gray);
         }
 
         .founder {
@@ -454,55 +477,45 @@
 
         .founder-name {
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
         }
 
         .founder-title {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-gray);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .founder-bio {
-            font-size: 14px;
+            font-size: 15px;
             line-height: 1.8;
             color: var(--text-gray);
         }
 
-        .manifesto-section {
-            border-top: 1px solid var(--border-gray);
-            padding-top: 48px;
+        .story-section {
+            margin-bottom: 40px;
         }
 
-        .manifesto-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 32px;
-            text-align: center;
+        .story-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
         }
 
-        .manifesto-block {
-            margin-bottom: 32px;
-        }
-
-        .manifesto-block h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .manifesto-block p {
-            font-size: 14px;
+        .story-section p {
+            font-size: 15px;
             line-height: 1.8;
             color: var(--text-gray);
             margin-bottom: 12px;
+        }
+
+        .story-section strong {
+            color: var(--text-white);
         }
 
         /* Footer */
@@ -510,6 +523,8 @@
             border-top: 1px solid var(--border-gray);
             padding: 48px 40px;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-text {
@@ -554,33 +569,16 @@
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
-                padding: 16px 20px;
-            }
-
-            .logo-image {
-                width: 40px;
-                height: 40px;
+                padding: 20px;
             }
 
             .logo-text {
-                font-size: 20px;
-            }
-
-            .hero {
-                padding: 60px 20px 40px;
-                margin-top: 80px;
-            }
-
-            .hero-title {
-                font-size: 36px;
-            }
-
-            .hero-subtitle {
-                font-size: 16px;
+                font-size: 32px;
+                letter-spacing: 2px;
             }
 
             .container {
-                padding: 40px 20px;
+                padding: 100px 20px 40px;
             }
 
             .card {
@@ -605,8 +603,16 @@
                 gap: 32px;
             }
 
-            .modal-content {
-                padding: 32px 24px;
+            .modal-body {
+                padding: 40px 24px;
+            }
+
+            .modal-logo-section {
+                padding: 40px 20px;
+            }
+
+            .modal-logo-section img {
+                width: 200px;
             }
         }
     </style>
@@ -615,17 +621,8 @@
     <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="logo-container" id="logoContainer">
-                <img src="logo.png" alt="PDFSTAMP Logo" class="logo-image">
-                <div class="logo-text">PDFSTAMP</div>
-            </div>
+            <div class="logo-text" id="logoText">PDFSTAMP</div>
         </div>
-    </div>
-
-    <!-- Hero -->
-    <div class="hero">
-        <h1 class="hero-title">Professional Document Stamping</h1>
-        <p class="hero-subtitle">Stamp and certify multiple PDFs with custom codes and dates</p>
     </div>
 
     <!-- Main Application -->
@@ -683,50 +680,54 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeAboutModal()">Close</button>
             
-            <div class="modal-logo">
+            <!-- Logo Section with Light Background -->
+            <div class="modal-logo-section">
                 <img src="logo.png" alt="PDFSTAMP Logo">
             </div>
 
-            <div class="founders-grid">
-                <div class="founder">
-                    <div class="founder-name">Ramon</div>
-                    <div class="founder-title">Co-Founder</div>
-                    <p class="founder-bio">Ramon brings vision and technical expertise to PDFSTAMP. With a background in document processing and a passion for elegant solutions, he helps shape the future of digital certification.</p>
-                </div>
-                <div class="founder">
-                    <div class="founder-name">Matt</div>
-                    <div class="founder-title">Co-Founder</div>
-                    <p class="founder-bio">Matt combines product design with engineering precision. His focus on user experience ensures PDFSTAMP remains intuitive, powerful, and trusted by professionals worldwide.</p>
-                </div>
-            </div>
+            <!-- Dark Content Area -->
+            <div class="modal-body">
+                <h2 class="modal-title">About PDFSTAMP</h2>
+                <p class="modal-subtitle">Professional Document Certification Made Simple</p>
 
-            <div class="manifesto-section">
-                <h2 class="manifesto-title">Our Story</h2>
+                <!-- Founders -->
+                <div class="founders-grid">
+                    <div class="founder">
+                        <div class="founder-name">Ramon</div>
+                        <div class="founder-title">Co-Founder & Visionary</div>
+                        <p class="founder-bio">Ramon brings vision and technical expertise to PDFSTAMP. With a background in document processing and a passion for elegant solutions, he helps shape the future of digital certification. His focus on reliability and user trust ensures every stamp carries the weight of authenticity.</p>
+                    </div>
+                    <div class="founder">
+                        <div class="founder-name">Matt</div>
+                        <div class="founder-title">Co-Founder & Product Lead</div>
+                        <p class="founder-bio">Matt combines product design with engineering precision. His focus on user experience ensures PDFSTAMP remains intuitive, powerful, and trusted by professionals worldwide. He believes great tools should be invisible—working seamlessly to help users achieve their goals.</p>
+                    </div>
+                </div>
 
-                <div class="manifesto-block">
-                    <h3>Mission</h3>
-                    <p>At PDFSTAMP, we bridge the gap between human authenticity and digital permanence. In an age where trust is essential, our stamps stand as immutable proof of presence—a handshake between the physical and digital world.</p>
+                <!-- Company Story -->
+                <div class="story-section">
+                    <h3>Our Mission</h3>
+                    <p>At <strong>PDFSTAMP</strong>, we bridge the gap between human authenticity and digital permanence. In an age where trust is essential, our stamps stand as immutable proof of presence—a handshake between the physical and digital world.</p>
                     <p>We believe every PDF deserves its moment of truth. That's why we built professional, reliable stamping technology for businesses and individuals who value authenticity.</p>
                 </div>
 
-                <div class="manifesto-block">
-                    <h3>Origin</h3>
-                    <p>PDFSTAMP started with a simple question: "What if we could stamp PDFs really well?"</p>
-                    <p>From that moment, what began as a side project became a professional tool—powered by attention to detail, user feedback, and a commitment to quality.</p>
-                    <p>Today, PDFSTAMP operates at the intersection of simplicity and power, helping professionals certify documents with confidence.</p>
+                <div class="story-section">
+                    <h3>Our Origin</h3>
+                    <p>PDFSTAMP started with a simple question: <strong>"What if we could stamp PDFs really well?"</strong></p>
+                    <p>From that moment, what began as a side project became a professional tool—powered by attention to detail, user feedback, and a commitment to quality. Today, PDFSTAMP operates at the intersection of simplicity and power, helping professionals certify documents with confidence.</p>
                 </div>
 
-                <div class="manifesto-block">
-                    <h3>Vision</h3>
+                <div class="story-section">
+                    <h3>Our Vision</h3>
                     <p>We envision a future where every document can be certified with confidence—from international contracts to local agreements, from corporate mergers to personal records.</p>
-                    <p>PDFSTAMP aims to be the trusted standard for document certification, making authenticity accessible to everyone.</p>
+                    <p><strong>PDFSTAMP aims to be the trusted standard for document certification</strong>, making authenticity accessible to everyone who needs to prove what's real.</p>
                 </div>
 
-                <div class="manifesto-block">
-                    <h3>Promise</h3>
-                    <p>We are committed to privacy-first principles. Your documents are processed locally in your browser—we never see, store, or transmit your files.</p>
-                    <p>We will never sell your data. We will never compromise on security. We remain focused on one thing: helping you certify documents with trust and confidence.</p>
-                    <p>PDFSTAMP is a tool built by professionals, for professionals.</p>
+                <div class="story-section">
+                    <h3>Our Promise</h3>
+                    <p><strong>Privacy First:</strong> Your documents are processed locally in your browser—we never see, store, or transmit your files. Everything happens on your machine.</p>
+                    <p><strong>No Data Collection:</strong> We don't track you, sell your data, or compromise on security. Your trust is our foundation.</p>
+                    <p><strong>Built for Professionals:</strong> PDFSTAMP is a tool built by professionals, for professionals who need reliability, speed, and precision in document certification.</p>
                 </div>
             </div>
         </div>
@@ -755,7 +756,7 @@
         let canvasScale = 1;
 
         // About modal - open from logo click
-        document.getElementById('logoContainer').addEventListener('click', function() {
+        document.getElementById('logoText').addEventListener('click', function() {
             document.getElementById('aboutModal').classList.add('show');
         });
 
@@ -777,7 +778,7 @@
                 if (!response.ok) throw new Error('Could not load stamp pci.jpg');
                 
                 const blob = await response.blob();
-                    const reader = new FileReader();
+                const reader = new FileReader();
                 
                 reader.onload = function(event) {
                     const img = new Image();
@@ -801,8 +802,8 @@
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
 
-            pdfFiles = files.map(file => ({
-                file: file,
+            pdfFiles = files.map(file => ({ 
+                file: file, 
                 code: '',
                 stampX: null,
                 stampY: null,
@@ -840,7 +841,7 @@
                     pdfData.code = e.target.value;
                     updateStartButton();
                 });
-
+                
                 item.appendChild(icon);
                 item.appendChild(name);
                 item.appendChild(input);
@@ -1089,15 +1090,15 @@
                     
                     const pageIndices = sourcePdf.getPageIndices();
                     const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIndices);
-
+                    
                     for (let pageIndex = 0; pageIndex < copiedPages.length; pageIndex++) {
                         const page = copiedPages[pageIndex];
                         mergedPdf.addPage(page);
-
+                        
                         if (pageIndex === 0) {
                             const stampImg = await mergedPdf.embedJpg(stampedImageBytes);
                             const { width, height } = page.getSize();
-
+                            
                             const stampWidth = 150;
                             const stampHeight = 90;
                             
